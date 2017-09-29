@@ -65,7 +65,7 @@ public class Fcm {
                 // TODO: change, test only
                 while (sc.hasNext()) {
                     String line = sc.nextLine();
-                    System.err.println(line);
+                    System.out.println(line);
                 }
             }
         } else {

@@ -5,7 +5,7 @@ public class Collecter {
     private File file;
     private int order;
     private double alpha;
-    private int generateLengt;
+    private int generateLength;
     private HashMap<String, HashMap<String, Integer>> words;
 
     public Collecter(String path, int order, double alpha) {

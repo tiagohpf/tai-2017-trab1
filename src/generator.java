@@ -1,2 +1,2 @@
-public class generator {
+public class Generator {
 }

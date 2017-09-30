@@ -1,6 +1,6 @@
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.util.Scanner;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * TAI, October 2017
@@ -13,14 +13,11 @@ import java.util.Scanner;
  */
 
 public class Fcm {
-    public static Scanner sc;
-
     public static void main(String[] args) {
         String filePath = new String();
         File file;
-        int order;
-        double alpha;
-        int generateLength;
+        int order = 0, generateLength = 0;
+        double alpha = 1;
         boolean enableGenerator = false;
 
         // Arguments
@@ -49,30 +46,13 @@ public class Fcm {
                         System.exit(1);
                     }
                 }
-                // Create the file
-                file = new File(filePath);
-                // Verify if the file exists
-                if (!file.exists()) {
-                    System.err.println("ERROR: " + filePath + " not found!");
-                    System.exit(1);
-                }
-                // Read the file
-                try {
-                    sc = new Scanner(file);
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                }
-                // TODO: change, test only
-                while (sc.hasNext()) {
-                    String line = sc.nextLine();
-                    System.out.println(line);
-                }
             }
         } else {
             System.err.println("ERROR: Invalid number of arguments");
             System.err.println("USAGE: filePath order (alpha) (length to generate text)");
             System.exit(1);
         }
+        Collecter collection = new Collecter(filePath, order, alpha);
     }
 
     // Auxiliary functions

@@ -24,32 +24,24 @@ import java.util.stream.Collectors;
 public class WordsCollector {
     private File file;
     private int order;
-    private double alpha;
     private List<String> alphabet;
     private List<String> combinations;
     private List<Pair<String, AlphabetCount>> words;
-    private List<Pair<String, AlphabetProb>> probabilities;
-    private Map<String, Integer> columnsSum;
     public static Scanner sc;
 
-    public WordsCollector(String path, int order, double alpha) {
+    public WordsCollector(String path, int order) {
         this.alphabet = new ArrayList<>();
         this.words = new ArrayList<Pair<String, AlphabetCount>>();
-        this.probabilities = new ArrayList<Pair<String, AlphabetProb>>();
-        this.columnsSum = new HashMap<>();
         this.order = order;
-        this.alpha = alpha;
         generateAlphabet();
         this.combinations = generateCombinations(order);
         generateCombinations(order);
         readFile(path);
 
         // TODO: delete, test only
-        System.out.println("##############################");
-        System.out.println(alphabet);
-        System.out.println(combinations);
-        System.out.println(words);
-        System.out.println(probabilities);
+        System.out.println("Alphabet: " + alphabet);
+        System.out.println("Combinations: " + combinations);
+        System.out.println("Words: " + words);
     }
 
     private void readFile(String path) {
@@ -77,7 +69,6 @@ public class WordsCollector {
             line = line.replaceAll("[ÏÎ]","I");
             line = line.replaceAll("[ÀÂÃ]","A");
             line = line.replaceAll("ÔÕÓÒ","O");
-            System.out.println(line);
             // First, get the character in text
             for (int i = order; i < line.length(); i++) {
                 String word = new String();
@@ -87,16 +78,8 @@ public class WordsCollector {
                     word += line.charAt(j);
                 }
                 incrementOccurrence(word.toUpperCase(), Character.toUpperCase(letter));
-                System.out.println("letter " + letter + ", " + "word " + word.toUpperCase());
-
-                calcColumnsSum(word.toUpperCase(), combinations);
-                calcProbabilities(columnsSum, words, word.toUpperCase(), alpha, alphabet.size());
             }
         }
-        // TODO: delete, test only
-        System.out.println("*********************");
-        System.out.println(columnsSum.size());
-        System.out.println(columnsSum);
     }
 
     private void generateAlphabet() {
@@ -133,10 +116,7 @@ public class WordsCollector {
         for (String combination : combinations) {
             for (String character : alphabet) {
                 AlphabetCount letter = new AlphabetCount(character, 0);
-                words.add(new Pair<String, AlphabetCount>(combination.toString(), letter));
-
-                AlphabetProb letterProb = new AlphabetProb(character, 0);
-                probabilities.add(new Pair<String, AlphabetProb>(combination.toString(), letterProb));
+                words.add(new Pair<>(combination.toString(), letter));
             }
         }
     }
@@ -146,6 +126,7 @@ public class WordsCollector {
                 words.stream()                              // convert list to stream
                 .filter(line -> line.getKey().equals(word)) // compare context
                 .collect(Collectors.toList());              // convert streams to List
+        filter = filter.subList(0, filter.size() / 2); // remove duplicates of stream
         for (Pair<String, AlphabetCount> row : filter) {
             String letterValue = row.getValue().getLetter();
             int letterNumber = row.getValue().getNumber();
@@ -155,51 +136,11 @@ public class WordsCollector {
         }
     }
 
-    private void calcColumnsSum (String word, List<String> combinations) {
-        int sum = 0;
-
-        List<Pair<String, AlphabetCount>> filter =
-                words.stream()                              // convert list to stream
-                .filter(line -> line.getKey().equals(word)) // compare context
-                .collect(Collectors.toList());              // convert streams to List
-
-        for (Pair<String, AlphabetCount> row : filter) {
-            int letterNumber = row.getValue().getNumber();
-            sum += letterNumber;
-        }
-
-        for (String combination : combinations) {
-            if(combination.equals(word))
-                columnsSum.put(combination, sum);
-        }
-    }
-
-    private double calcProbabilities(Map<String, Integer> columnsSum, List<Pair<String, AlphabetCount>> words,
-                                     String word, double alpha, int alphabetSize) {
-        double probCalc = 0;
-        int sum = 0;
-
-        List<Pair<String, AlphabetCount>> filter =
-                words.stream()                                      // convert list to stream
-                        .filter(line -> line.getKey().equals(word)) // compare context
-                        .collect(Collectors.toList());              // convert streams to List
-        for (Pair<String, AlphabetCount> row : filter) {
-            int letterNumber = row.getValue().getNumber();
-            //System.out.println("LETTERNUMBER " + letterNumber); // TODO: delete, test only
-
-            for (Map.Entry<String, Integer> entry : columnsSum.entrySet()) {
-                if (entry.getKey().equals(word)) {
-                    sum = entry.getValue();
-                    //System.out.println("SUM " + sum); // TODO: delete, test only
-                }
-            }
-            probCalc = (letterNumber + alpha) / (sum + (alpha * alphabetSize));
-            System.out.println("PROBCALC " + probCalc); // TODO: delete, test only
-        }
-        return probCalc;
-    }
-
     public ArrayList<Pair<String, AlphabetCount>> getWords() {
         return (ArrayList<Pair<String, AlphabetCount>>) words;
+    }
+
+    public List<String> getCombinations() {
+        return combinations;
     }
 }

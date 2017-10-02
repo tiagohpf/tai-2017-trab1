@@ -35,6 +35,6 @@ public class Pair<K, V> {
     }
 
     public String toString() {
-        return key + ", " + value;
+        return "(" + key + ", " + value + ")";
     }
 }

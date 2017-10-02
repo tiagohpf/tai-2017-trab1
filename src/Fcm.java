@@ -1,5 +1,6 @@
 import Utils.AlphabetCount;
 import Utils.Pair;
+import Utils.ProbManager;
 
 import java.util.List;
 
@@ -57,8 +58,11 @@ public class Fcm {
             System.exit(1);
         }
 
-        WordsCollector collection = new WordsCollector(filePath, order, alpha);
+        WordsCollector collection = new WordsCollector(filePath, order);
         List<Pair<String, AlphabetCount>> words = collection.getWords();
+        List<String> combinations = collection.getCombinations();
+        ProbManager probabilities = new ProbManager(words, combinations, alpha);
+        System.out.println("Entropy: " + probabilities.getEntropy() + " bits");
     }
 
     // Auxiliary functions

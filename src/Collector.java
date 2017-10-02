@@ -55,6 +55,18 @@ public class Collector {
         while (sc.hasNext()) {
             //Remove all special characters
             String line = sc.nextLine().replaceAll("[-+.^:,'!?_]", "");
+            line = line.replaceAll("[ñ]","n");
+            line = line.replaceAll("[ç]","c");
+            line = line.replaceAll("[èéêë]","e");
+            line = line.replaceAll("[ûùü]","u");
+            line = line.replaceAll("[ïî]","i");
+            line = line.replaceAll("[õòòô]","a");
+            line = line.replaceAll("[àâãá]","a");
+            line = line.replaceAll("[ÈÉÊË]","E");
+            line = line.replaceAll("[ÛÙÜ]","U");
+            line = line.replaceAll("[ÏÎ]","I");
+            line = line.replaceAll("[ÀÂÃ]","A");
+            line = line.replaceAll("ÔÕÓÒ","O");
             System.out.println(line);
             //First, get the character in text
             for (int i = order; i < line.length(); i++) {

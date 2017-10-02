@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 /**
  * Collect statistical information about texts, using finite-context models
  */
-public class Collector {
+public class WordsCollector {
     private File file;
     private int order;
     private double alpha;
@@ -28,7 +28,7 @@ public class Collector {
     private List<String> alphabet;
     public static Scanner sc;
 
-    public Collector(String path, int order, double alpha) {
+    public WordsCollector(String path, int order, double alpha) {
         this.words = new ArrayList<Pair<String, AlphabetCount>>();
         this.alphabet = new ArrayList<>();
         this.order = order;

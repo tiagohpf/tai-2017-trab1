@@ -9,6 +9,8 @@
  */
 
 
+import java.util.List;
+
 /**
  * Main class
  */
@@ -52,7 +54,8 @@ public class Fcm {
             System.exit(1);
         }
 
-        Collector collection = new Collector(filePath, order, alpha);
+        WordsCollector collection = new WordsCollector(filePath, order, alpha);
+        List<Pair<String, AlphabetCount>> words = collection.getWords();
     }
 
     // Auxiliary functions

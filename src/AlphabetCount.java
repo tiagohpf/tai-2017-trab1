@@ -25,6 +25,14 @@ public class AlphabetCount {
         return number;
     }
 
+    public void setLetter(String letter) {
+        this.letter = letter;
+    }
+
+    public void setNumber(int number) {
+        this.number = number;
+    }
+
     public String toString() {
         return "{" + letter + ", " + number + "}";
     }

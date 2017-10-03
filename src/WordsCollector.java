@@ -50,6 +50,10 @@ public class WordsCollector {
         return combinations;
     }
 
+    public List<String> getAlphabet() {
+        return alphabet;
+    }
+
     private void readFile(String path) {
         // Create the file
         file = new File(path);
@@ -77,7 +81,7 @@ public class WordsCollector {
     }
 
     private String removeSpecialCharacters(String line) {
-        line = line.replaceAll("[-+.^:,'!?_]", "");
+        line = line.replaceAll("[-+.^:,;'!?_\"]", "");
         line = line.replaceAll("[ñ]", "n");
         line = line.replaceAll("[ç]", "c");
         line = line.replaceAll("[èéêë]", "e");

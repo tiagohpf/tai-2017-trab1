@@ -38,6 +38,7 @@ public class WordsCollector {
 
         // TODO: delete, test only
         System.out.println("Alphabet: " + alphabet);
+        System.out.println("Combinations: " + combinations);
         System.out.println("Words: " + words);
     }
 
@@ -120,10 +121,9 @@ public class WordsCollector {
         for (String character : alphabet) {
             if (character.equals("" + letter))
                 words.add(new Pair<>(word, new AlphabetCount("" + character, 1)));
-            else {
+            else
                 words.add(new Pair<>(word, new AlphabetCount("" + character, 0)));
-                combinations.add(word);
-            }
         }
+        combinations.add(word);
     }
 }

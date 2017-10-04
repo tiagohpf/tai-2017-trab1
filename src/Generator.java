@@ -13,4 +13,8 @@
  * Automatic text generation
  */
 public class Generator {
+    private int size;
+    public Generator(int size) {
+        this.size = size;
+    }
 }

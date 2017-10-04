@@ -1,6 +1,7 @@
 import Utils.AlphabetCount;
 import Utils.Pair;
 import Utils.ProbManager;
+import Utils.WordsCollector;
 
 import java.util.List;
 
@@ -23,7 +24,6 @@ public class Fcm {
         String filePath = new String();
         int order = 0, generateLength = 0;
         double alpha = 1;
-        boolean enableGenerator = false;
 
         // Arguments
         if (args.length >= 2 && args.length <= 4) {
@@ -62,8 +62,8 @@ public class Fcm {
         List<Pair<String, AlphabetCount>> words = collection.getWords();
         List<String> combinations = collection.getCombinations();
         ProbManager probabilities = new ProbManager(words, combinations, alpha, collection.getAlphabet());
-        System.out.println("Entropy: " + String.format("%.3f", probabilities.getEntropy())
-                + " bits");
+        Generator generator = new Generator(generateLength);
+        System.out.println("Entropy: " + String.format("%.3f", probabilities.getEntropy()) + " bits");
     }
 
     // Auxiliary functions

@@ -1,16 +1,14 @@
 package Utils;
 
-import Utils.AlphabetCount;
-import Utils.Pair;
-
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.lang.reflect.Field;
 import java.util.*;
 import java.util.stream.Collectors;
 
 /**
  * TAI, October 2017
- * <p>
+ *
  * Assignment 1 - Finite-context model and automatic text generation
  *
  * @author Bárbara Jael, 73241, barbara.jael@ua.pt
@@ -27,12 +25,14 @@ public class WordsCollector {
     private int order;
     private List<String> alphabet;
     private List<Pair<String, AlphabetCount>> words;
+    private List<Pair<String, AlphabetCount>> associations;
     private List<String> combinations;
     public static Scanner sc;
 
     public WordsCollector(String path, int order) {
         this.alphabet = new ArrayList<>();
         this.words = new ArrayList<Pair<String, AlphabetCount>>();
+        this.associations = new ArrayList<Pair<String, AlphabetCount>>();
         this.combinations = new ArrayList<>();
         this.order = order;
         generateAlphabet();
@@ -42,6 +42,8 @@ public class WordsCollector {
         System.out.println("Alphabet: " + alphabet);
         System.out.println("Combinations: " + combinations);
         System.out.println("Words: " + words);
+        System.out.println("Associations: " + associations);
+        //System.out.println(associations.size());
     }
 
     public ArrayList<Pair<String, AlphabetCount>> getWords() {
@@ -77,7 +79,18 @@ public class WordsCollector {
                 for (int j = i - order; j < i; j++) {
                     word += line.charAt(j);
                 }
-                addOccurrence(word.toUpperCase(), Character.toUpperCase(letter));
+                addOccurrence(words, word.toUpperCase(), Character.toUpperCase(letter));
+            }
+
+            // associations
+            for (int i = 1; i < line.length(); i++) {
+                String word = new String();
+                char letter = line.charAt(i);
+                //Second, get the context give an order
+                for (int j = i - 1; j < i; j++) {
+                    word += line.charAt(j);
+                }
+                addOccurrence(associations, word.toUpperCase(), Character.toUpperCase(letter));
             }
         }
     }
@@ -107,12 +120,12 @@ public class WordsCollector {
         alphabet.add(" ");
     }
 
-    private void addOccurrence(String word, char letter) {
+    private void addOccurrence(List<Pair<String, AlphabetCount>> list, String word, char letter) {
         List<Pair<String, AlphabetCount>> filter =
-                words.stream()                              // convert list to stream
+                list.stream()                                      // convert list to stream
                         .filter(line -> line.getKey().equals(word)) // compare context
                         .collect(Collectors.toList());              // convert streams to List
-        if (filter.size() > 0) {                            // if already exists the word in context
+        if (filter.size() > 0) {                                    // if already exists the word in context
             for (Pair<String, AlphabetCount> row : filter) {
                 String letterValue = row.getValue().getLetter();
                 int letterNumber = row.getValue().getNumber();
@@ -120,15 +133,15 @@ public class WordsCollector {
                     row.getValue().setNumber(letterNumber + 1);
             }
         } else
-            createNewInstanceInMap(word, letter);
+            createNewInstanceInMap(list, word, letter);
     }
 
-    private void createNewInstanceInMap(String word, char letter) {
+    private void createNewInstanceInMap(List<Pair<String, AlphabetCount>> list, String word, char letter) {
         for (String character : alphabet) {
             if (character.equals("" + letter))
-                words.add(new Pair<>(word, new AlphabetCount("" + character, 1)));
+                list.add(new Pair<>(word, new AlphabetCount("" + character, 1)));
             else
-                words.add(new Pair<>(word, new AlphabetCount("" + character, 0)));
+                list.add(new Pair<>(word, new AlphabetCount("" + character, 0)));
         }
         combinations.add(word);
     }

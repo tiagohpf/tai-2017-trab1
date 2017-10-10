@@ -15,33 +15,41 @@ import java.util.stream.Collectors;
  */
 
 public class ProbManager {
-    private List<Pair<String, AlphabetCount>> words;        // words of file
-    private List<Pair<String, Integer>> counts;             // count of each words
-    private List<Pair<String, AlphabetProb>> probs;        // probabilities
+    private List<Pair<String, AlphabetCount>> words;
+    private List<Pair<String, AlphabetCount>> associations;
+    private List<Pair<String, Integer>> wordCounts;
+    private List<Pair<String, AlphabetProb>> wordProbs;
+    private List<Pair<String, Integer>> assocCounts;
+    private List<Pair<String, AlphabetProb>> assocProbs;
     private List<String> combinations;
     private List<String> alphabet;
     private double alpha;
 
     public ProbManager(List<Pair<String, AlphabetCount>> words, List<String> combinations,
-                       double alpha, List<String> alphabet) {
+                       double alpha, List<String> alphabet, List<Pair<String, AlphabetCount>> associations) {
         this.words = words;
-        this.counts = new ArrayList<>();
-        this.probs = new ArrayList<>();
+        wordCounts = new ArrayList<>();
+        wordProbs = new ArrayList<>();
+        assocCounts = new ArrayList<>();
+        assocProbs = new ArrayList<>();
         this.combinations = combinations;
         this.alpha = alpha;
         this.alphabet = alphabet;
+        this.associations = associations;
         sumOfColumns();
+        getAssociationsSum();
         calculateProbabilities();
 
         //ToDO: Delete, test only
-        System.out.println("Counts: " + counts);
-        System.out.println("Probs: " + probs);
+        System.out.println("Counts: " + wordCounts);
+        System.out.println("Probs: " + wordProbs);
+        System.out.println("Assoc Counts: " + assocCounts);
     }
 
     public double getEntropy() {
         int totalOccurrences = sumTotalOcurrences();
         double entropy = 0;
-        for (Pair<String, Integer> wordOccurrences : counts) {
+        for (Pair<String, Integer> wordOccurrences : wordCounts) {
             String word = wordOccurrences.getKey();
             int occurrences = wordOccurrences.getValue();
             double h = 0;
@@ -59,36 +67,48 @@ public class ProbManager {
     private void sumOfColumns() {
         for (int i = 0; i < combinations.size(); i++) {
             String word = combinations.get(i);
-            List<Pair<String, AlphabetCount>> filter = filterCollectionInCount(word);
+            List<Pair<String, AlphabetCount>> filter = filterWordCollectionInCount(word);
             int sum = 0;
             for (Pair<String, AlphabetCount> pair : filter) {
                 sum += pair.getValue().getNumber();
             }
-            counts.add(new Pair<>(word, sum));
+            wordCounts.add(new Pair<>(word, sum));
+        }
+    }
+
+    public void getAssociationsSum() {
+        for (int i = 0; i < alphabet.size(); i++) {
+            int sum = 0;
+            String word = alphabet.get(i);
+            List<Pair<String, AlphabetCount>> filter = filterAssocCollectionInCount(word);
+            for(Pair<String, AlphabetCount> pair : filter) {
+                sum += pair.getValue().getNumber();
+            }
+            assocCounts.add(new Pair<>(word, sum));
         }
     }
 
     private void calculateProbabilities() {
-        for (Pair<String, Integer> wordOccurrences : counts) {
+        for (Pair<String, Integer> wordOccurrences : wordCounts) {
             String word = wordOccurrences.getKey();
-            List<Pair<String, AlphabetCount>> filter = filterCollectionInCount(word);
+            List<Pair<String, AlphabetCount>> filter = filterWordCollectionInCount(word);
             for (Pair<String, AlphabetCount> letterOccurrences : filter) {
                 String letter = letterOccurrences.getValue().getLetter();
                 int number = letterOccurrences.getValue().getNumber();
                 double prob = (number + alpha) / (wordOccurrences.getValue() + alphabet.size() * alpha);
-                probs.add(new Pair<>(word, new AlphabetProb(letter, prob)));
+                wordProbs.add(new Pair<>(word, new AlphabetProb(letter, prob)));
             }
         }
     }
 
     private int sumTotalOcurrences() {
         int sum = 0;
-        for (Pair<String, Integer> wordOccurrences : counts)
+        for (Pair<String, Integer> wordOccurrences : wordCounts)
             sum += wordOccurrences.getValue();
         return sum;
     }
 
-    private List<Pair<String, AlphabetCount>> filterCollectionInCount(String word) {
+    private List<Pair<String, AlphabetCount>> filterWordCollectionInCount(String word) {
         List<Pair<String, AlphabetCount>> filter =
                 words.stream()
                         .filter(line -> line.getKey().equals(word))
@@ -96,9 +116,17 @@ public class ProbManager {
         return filter;
     }
 
+    private List<Pair<String, AlphabetCount>> filterAssocCollectionInCount(String word) {
+        List<Pair<String, AlphabetCount>> filter =
+                associations.stream()
+                        .filter(line -> line.getKey().equals(word))
+                        .collect(Collectors.toList());
+        return filter;
+    }
+
     private List<Pair<String, AlphabetProb>> filterCollectionInProb(String word) {
         List<Pair<String, AlphabetProb>> filter =
-                probs.stream()
+                wordProbs.stream()
                         .filter(line -> line.getKey().equals(word))
                         .collect(Collectors.toList());
         return filter;

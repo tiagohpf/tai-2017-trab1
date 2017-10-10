@@ -61,7 +61,8 @@ public class Fcm {
         WordsCollector collection = new WordsCollector(filePath, order);
         List<Pair<String, AlphabetCount>> words = collection.getWords();
         List<String> combinations = collection.getCombinations();
-        ProbManager probabilities = new ProbManager(words, combinations, alpha, collection.getAlphabet());
+        ProbManager probabilities = new ProbManager(words, combinations, alpha, collection.getAlphabet(),
+                collection.getAssociations());
         Generator generator = new Generator(generateLength);
         System.out.println("Entropy: " + String.format("%.3f", probabilities.getEntropy()) + " bits");
     }

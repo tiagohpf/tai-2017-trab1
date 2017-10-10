@@ -58,6 +58,10 @@ public class WordsCollector {
         return alphabet;
     }
 
+    public ArrayList<Pair<String, AlphabetCount>> getAssociations() {
+        return (ArrayList<Pair<String, AlphabetCount>>) associations;
+    }
+
     private void readFile(String path) {
         // Create the file
         file = new File(path);

@@ -6,7 +6,7 @@ import java.util.stream.Collectors;
 
 /**
  * TAI, October 2017
- * <p>
+ *
  * Assignment 1 - Finite-context model and automatic text generation
  *
  * @author Bárbara Jael, 73241, barbara.jael@ua.pt
@@ -39,11 +39,13 @@ public class ProbManager {
         sumOfColumns();
         getAssociationsSum();
         calculateProbabilities();
+        calculateAssocProbabilities();
 
-        //ToDO: Delete, test only
+        //TODO: Delete, test only
         System.out.println("Counts: " + wordCounts);
         System.out.println("Probs: " + wordProbs);
         System.out.println("Assoc Counts: " + assocCounts);
+        System.out.println("Assoc Probs: " + assocProbs);
     }
 
     public double getEntropy() {
@@ -97,6 +99,19 @@ public class ProbManager {
                 int number = letterOccurrences.getValue().getNumber();
                 double prob = (number + alpha) / (wordOccurrences.getValue() + alphabet.size() * alpha);
                 wordProbs.add(new Pair<>(word, new AlphabetProb(letter, prob)));
+            }
+        }
+    }
+
+    private void calculateAssocProbabilities() {
+        for (Pair<String, Integer> wordOccurrences : assocCounts) {
+            String word = wordOccurrences.getKey();
+            List<Pair<String, AlphabetCount>> filter = filterAssocCollectionInCount(word);
+            for(Pair<String, AlphabetCount> letterOccurrences : filter) {
+                String letter = letterOccurrences.getValue().getLetter();
+                int number = letterOccurrences.getValue().getNumber();
+                double prob = (number + alpha) / (wordOccurrences.getValue() + alphabet.size() * alpha);
+                assocProbs.add(new Pair<>(word, new AlphabetProb(letter, prob)));
             }
         }
     }

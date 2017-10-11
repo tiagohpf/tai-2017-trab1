@@ -62,9 +62,7 @@ public class ProbManager {
                 // log a (x) = log b (x) / log b (a)
                 h += (prob * (Math.log10(prob) / Math.log10(2))) * (-1);
             }
-            int totalSize = (int)Math.pow(alphabet.size(), order);
             entropy += h * (occurrences * 1.0 / totalOccurrences);
-            entropy += (totalSize - totalOccurrences) / totalSize;
         }
         return entropy;
     }

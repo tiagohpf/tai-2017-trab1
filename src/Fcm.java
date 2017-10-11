@@ -46,6 +46,8 @@ public class Fcm {
                 if (args.length == 4) {
                     if (isIntegerValid(args[3])) {
                         generateLength = Integer.parseInt(args[3]);
+                        if (order > generateLength)
+                            System.err.println("ERROR: Order must be less or equal than text length.");
                     } else {
                         System.err.println("ERROR: Invalid argument, text length must be an INTEGER > 0");
                         System.exit(1);
@@ -65,8 +67,8 @@ public class Fcm {
                 collection.getAssociations(), order);
         Generator generator = new Generator(generateLength, probabilities.getWordCounts(), probabilities.getAssocCounts(),
                 probabilities.getWordProbs(), probabilities.getAssocProbs(), order);
-        System.out.println("Entropy: " + String.format("%.3f", probabilities.getEntropy()) + " bits");
         System.out.println(generator.generateText());
+        System.out.println("Entropy: " + String.format("%.3f", probabilities.getEntropy()) + " bits");
     }
 
     // Auxiliary functions

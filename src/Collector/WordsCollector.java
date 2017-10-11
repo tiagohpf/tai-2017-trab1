@@ -140,7 +140,7 @@ public class WordsCollector {
     }
 
     /**
-     * Create a new instance (row) on context
+     * Create a new instance in context
      * If the association was found in text, create with value 1. Otherwise, create with value 0
      *
      * @param list

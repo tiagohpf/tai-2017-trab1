@@ -62,9 +62,11 @@ public class Fcm {
         List<Pair<String, AlphabetCount>> words = collection.getWords();
         List<String> combinations = collection.getCombinations();
         ProbManager probabilities = new ProbManager(words, combinations, alpha, collection.getAlphabet(),
-                collection.getAssociations());
-        Generator generator = new Generator(generateLength);
+                collection.getAssociations(), order);
+        Generator generator = new Generator(generateLength, probabilities.getWordCounts(), probabilities.getAssocCounts(),
+                probabilities.getWordProbs(), probabilities.getAssocProbs(), order);
         System.out.println("Entropy: " + String.format("%.3f", probabilities.getEntropy()) + " bits");
+        System.out.println(generator.generateText());
     }
 
     // Auxiliary functions
@@ -86,8 +88,9 @@ public class Fcm {
      * @return
      */
     public static boolean isAlphaValid(String argument) {
-        return isDouble(argument)
-                && (Double.parseDouble(argument) >= 0.001 && Double.parseDouble(argument) <= 1);
+        /*return isDouble(argument)
+                && (Double.parseDouble(argument) >= 0.001 && Double.parseDouble(argument) <= 1);*/
+        return true;
     }
 
     /**

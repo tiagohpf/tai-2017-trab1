@@ -30,19 +30,19 @@ public class WordsCollector {
 
     public WordsCollector(String path, int order) {
         this.alphabet = new ArrayList<>();
-        this.words = new ArrayList<Pair<String, AlphabetCount>>();
-        this.associations = new ArrayList<Pair<String, AlphabetCount>>();
+        this.words = new ArrayList<>();
+        this.associations = new ArrayList<>();
         this.combinations = new ArrayList<>();
         this.order = order;
         generateAlphabet();
         readFile(path);
 
         // TODO: delete, test only
-        System.out.println("Alphabet: " + alphabet);
+        /*System.out.println("Alphabet: " + alphabet);
         System.out.println("Combinations: " + combinations);
         System.out.println("Words: " + words);
         System.out.println("Associations: " + associations);
-        //System.out.println(associations.size());
+        System.out.println(associations.size());*/
     }
 
     public ArrayList<Pair<String, AlphabetCount>> getWords() {

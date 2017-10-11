@@ -24,9 +24,11 @@ public class ProbManager {
     private List<String> combinations;
     private List<String> alphabet;
     private double alpha;
+    private int order;
 
     public ProbManager(List<Pair<String, AlphabetCount>> words, List<String> combinations,
-                       double alpha, List<String> alphabet, List<Pair<String, AlphabetCount>> associations) {
+                       double alpha, List<String> alphabet, List<Pair<String, AlphabetCount>> associations,
+                       int order) {
         this.words = words;
         wordCounts = new ArrayList<>();
         wordProbs = new ArrayList<>();
@@ -36,16 +38,15 @@ public class ProbManager {
         this.alpha = alpha;
         this.alphabet = alphabet;
         this.associations = associations;
+        this.order = order;
         sumOfColumns();
         getAssociationsSum();
         calculateProbabilities();
         calculateAssocProbabilities();
 
         //TODO: Delete, test only
-        System.out.println("Counts: " + wordCounts);
-        System.out.println("Probs: " + wordProbs);
-        System.out.println("Assoc Counts: " + assocCounts);
-        System.out.println("Assoc Probs: " + assocProbs);
+        /*System.out.println("Counts: " + wordCounts);
+        System.out.println("Probs: " + wordProbs);*/
     }
 
     public double getEntropy() {
@@ -61,9 +62,27 @@ public class ProbManager {
                 // log a (x) = log b (x) / log b (a)
                 h += (prob * (Math.log10(prob) / Math.log10(2))) * (-1);
             }
+            int totalSize = (int)Math.pow(alphabet.size(), order);
             entropy += h * (occurrences * 1.0 / totalOccurrences);
+            entropy += (totalSize - totalOccurrences) / totalSize;
         }
         return entropy;
+    }
+
+    public List<Pair<String, AlphabetProb>> getWordProbs() {
+        return wordProbs;
+    }
+
+    public List<Pair<String, AlphabetProb>> getAssocProbs() {
+        return assocProbs;
+    }
+
+    public List<Pair<String, Integer>> getWordCounts() {
+        return wordCounts;
+    }
+
+    public List<Pair<String, Integer>> getAssocCounts() {
+        return assocCounts;
     }
 
     private void sumOfColumns() {

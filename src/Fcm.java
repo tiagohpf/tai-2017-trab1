@@ -1,7 +1,9 @@
-import Utils.AlphabetCount;
+import Alphabet.AlphabetCount;
+import Utils.Creator;
 import Utils.Pair;
-import Utils.ProbManager;
-import Utils.WordsCollector;
+import Probabilities.ProbManager;
+import Collector.WordsCollector;
+import Utils.Validator;
 
 import java.util.List;
 
@@ -16,19 +18,28 @@ import java.util.List;
  */
 
 
-/**
- * Main class
- */
+// Main class that runs the project
 public class Fcm {
     public static void main(String[] args) {
         String filePath = new String();
         int order = 0, generateLength = 0;
         double alpha = 1;
 
-        // Arguments
+        /*
+         * Program needs at least 2 arguments: filename and order, both valid
+         * It's possible to use also 3 arguments (add alpha) and 4 (add alpha and length of text generated)
+         * Text is just generated when program have all 4 arguments
+         * Alpha = 1 when is not inserted
+         * Length of text must >= order
+         * Alpha must be in [0.001, 1]
+         * USAGE: <filename> <order> <alpha> <text length>
+         * Examples of Usage:
+         *  - "I Have a Dream.txt" 3
+         *  - "I Have a Dream.txt" 2 0.4 33
+         */
         if (args.length >= 2 && args.length <= 4) {
             filePath = args[0];
-            if (isIntegerValid(args[1])) {
+            if (Validator.isIntegerValid(args[1])) {
                 order = Integer.parseInt(args[1]);
             } else {
                 System.err.println("ERROR: Invalid argument, order must be an INTEGER > 0");
@@ -37,14 +48,14 @@ public class Fcm {
             if (args.length == 2) {
                 alpha = 1;
             } else if (args.length >= 3) {
-                if (isAlphaValid(args[2])) {
+                if (Validator.isAlphaValid(args[2])) {
                     alpha = Double.parseDouble(args[2]);
                 } else {
                     System.err.println("ERROR: Invalid argument, alpha must be a DOUBLE within [0.001, 1]");
                     System.exit(1);
                 }
                 if (args.length == 4) {
-                    if (isIntegerValid(args[3])) {
+                    if (Validator.isIntegerValid(args[3])) {
                         generateLength = Integer.parseInt(args[3]);
                         if (order > generateLength)
                             System.err.println("ERROR: Order must be less or equal than text length.");
@@ -60,68 +71,15 @@ public class Fcm {
             System.exit(1);
         }
 
-        WordsCollector collection = new WordsCollector(filePath, order);
-        List<Pair<String, AlphabetCount>> words = collection.getWords();
-        List<String> combinations = collection.getCombinations();
-        ProbManager probabilities = new ProbManager(words, combinations, alpha, collection.getAlphabet(),
+        List<String> alphabet = Creator.createAlphabet();
+        WordsCollector collection = new WordsCollector(filePath, order, alphabet);
+        List<Pair<String, AlphabetCount>> words = collection.getContext();
+        List<String> combinations = collection.getContextCombinations();
+        ProbManager probabilities = new ProbManager(words, combinations, alpha, alphabet,
                 collection.getAssociations(), order);
         Generator generator = new Generator(generateLength, probabilities.getWordCounts(), probabilities.getAssocCounts(),
                 probabilities.getWordProbs(), probabilities.getAssocProbs(), order);
         System.out.println(generator.generateText());
         System.out.println("Entropy: " + String.format("%.3f", probabilities.getEntropy()) + " bits");
-    }
-
-    // Auxiliary functions
-
-    /**
-     * Verify if the argument is a valid Integer
-     *
-     * @param argument
-     * @return
-     */
-    public static boolean isIntegerValid(String argument) {
-        return isInteger(argument) && Integer.parseInt(argument) > 0;
-    }
-
-    /**
-     * Verify if alpha is valid
-     *
-     * @param argument
-     * @return
-     */
-    public static boolean isAlphaValid(String argument) {
-        /*return isDouble(argument)
-                && (Double.parseDouble(argument) >= 0.001 && Double.parseDouble(argument) <= 1);*/
-        return true;
-    }
-
-    /**
-     * Verify if the argument is an Integer
-     *
-     * @param s
-     * @return
-     */
-    public static boolean isInteger(String s) {
-        try {
-            Integer.parseInt(s);
-            return true;
-        } catch (NumberFormatException ex) {
-            return false;
-        }
-    }
-
-    /**
-     * Verify if the argument is a Double
-     *
-     * @param s
-     * @return
-     */
-    public static boolean isDouble(String s) {
-        try {
-            Double.parseDouble(s);
-            return true;
-        } catch (NumberFormatException ex) {
-            return false;
-        }
     }
 }

@@ -9,7 +9,7 @@
  */
 
 
-import Utils.AlphabetProb;
+import Alphabet.AlphabetProb;
 import Utils.Pair;
 
 import java.util.Collections;

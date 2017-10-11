@@ -10,30 +10,45 @@ package Utils;
  * @author Tiago Faria, 73714, tiagohpf@ua.pt
  */
 
+// Class that creates a data structure to use a Pair<Key, Value>
 public class Pair<K, V> {
     private K key;
     private V value;
+
+    /**
+     * Constructor
+     *
+     * @param key
+     * @param value
+     */
     public Pair(K key, V value) {
         this.key = key;
         this.value = value;
     }
 
+    /**
+     * Get key of pair
+     *
+     * @return key
+     */
     public K getKey() {
         return key;
     }
 
+    /**
+     * Get value of pair
+     *
+     * @return value
+     */
     public V getValue() {
         return value;
     }
 
-    public void setKey(K key) {
-        this.key = key;
-    }
-
-    public void setValue(V value) {
-        this.value = value;
-    }
-
+    /**
+     * Print the Pair
+     *
+     * @return result
+     */
     public String toString() {
         return "(" + key + ", " + value + ")";
     }

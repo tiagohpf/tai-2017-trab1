@@ -1,4 +1,8 @@
-package Utils;
+package Probabilities;
+
+import Alphabet.AlphabetCount;
+import Alphabet.AlphabetProb;
+import Utils.Pair;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -160,7 +160,7 @@ public class Generator {
     }
 
     /**
-     * Return the 
+     * Return the total number of occurrences in context
      * 
      * @return total number of words
      */

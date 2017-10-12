@@ -18,15 +18,23 @@ import java.util.List;
  * @author Tiago Faria, 73714, tiagohpf@ua.pt
  */
 
-// Class that count and calculates probabilities of context
+// Class that count and calculate probabilities of context
 public class ProbManager {
+    // List that counts the appearance of contexts in text
     private List<Pair<String, AlphabetCount>> context;
+    // List of combinations with order = 1
     private List<Pair<String, AlphabetCount>> associations;
+    // List of counting words after context
     private List<Pair<String, Integer>> contextCounter;
+    // List of probabilities in context
     private List<Pair<String, AlphabetProb>> contextProbs;
+    // List of counting associations
     private List<Pair<String, Integer>> assocCounter;
+    // List of probabilities in associations
     private List<Pair<String, AlphabetProb>> assocProbs;
-    private List<String> combinations;
+    // List of combinations created in context
+    private List<String> contextCombinations;
+    // List of alphabet. 27 characters [A-Z] and whitespace
     private List<String> alphabet;
     private double alpha;
 
@@ -34,23 +42,26 @@ public class ProbManager {
      * Constructor
      *
      * @param context
-     * @param combinations
+     * @param contextCombinations
      * @param alpha
      * @param alphabet
      * @param associations
      */
-    public ProbManager(List<Pair<String, AlphabetCount>> context, List<String> combinations,
-                       double alpha, List<String> alphabet, List<Pair<String, AlphabetCount>> associations) {
+    public ProbManager(List<Pair<String, AlphabetCount>> context,
+                       List<String> contextCombinations,
+                       double alpha,
+                       List<String> alphabet,
+                       List<Pair<String, AlphabetCount>> associations) {
         this.context = context;
         contextCounter = new ArrayList<>();
         contextProbs = new ArrayList<>();
         assocCounter = new ArrayList<>();
         assocProbs = new ArrayList<>();
-        this.combinations = combinations;
+        this.contextCombinations = contextCombinations;
         this.alpha = alpha;
         this.alphabet = alphabet;
         this.associations = associations;
-        sumOccurrences(combinations, contextCounter, context);
+        sumOccurrences(contextCombinations, contextCounter, context);
         sumOccurrences(alphabet, assocCounter, associations);
         calculateProbabilities(contextCounter, context, contextProbs);
         calculateProbabilities(assocCounter, associations, assocProbs);
@@ -62,7 +73,7 @@ public class ProbManager {
      * @return entropy
      */
     public double getEntropy() {
-        // Get number of total combinations created
+        // Get number of total contextCombinations created
         int totalCombinations = getNumberOfCombinationsInContext();
         double entropy = 0;
         for (Pair<String, Integer> wordOccurrences : contextCounter) {
@@ -132,7 +143,7 @@ public class ProbManager {
         }
     }
 
-    // Calculate probabilities in contex
+    // Calculate probabilities in context
     private void calculateProbabilities(List<Pair<String, Integer>> counter,
                                         List<Pair<String, AlphabetCount>> context,
                                         List<Pair<String, AlphabetProb>> probabilities) {
@@ -149,9 +160,9 @@ public class ProbManager {
     }
 
     /**
-     * Return total number of combinations create in context
+     * Return total number of contextCombinations create in context
      *
-     * @return total number of combinations in context
+     * @return total number of contextCombinations in context
      */
     private int getNumberOfCombinationsInContext() {
         int sum = 0;

@@ -1,4 +1,4 @@
-import Alphabet.AlphabetCount;
+import Pair.AlphabetCount;
 import Utils.Creator;
 import Utils.Pair;
 import Probabilities.ProbManager;
@@ -76,9 +76,9 @@ public class Fcm {
         List<Pair<String, AlphabetCount>> words = collection.getContext();
         List<String> combinations = collection.getContextCombinations();
         ProbManager probabilities = new ProbManager(words, combinations, alpha, alphabet,
-                collection.getAssociations(), order);
-        Generator generator = new Generator(generateLength, probabilities.getWordCounts(), probabilities.getAssocCounts(),
-                probabilities.getWordProbs(), probabilities.getAssocProbs(), order);
+                collection.getAssociations());
+        Generator generator = new Generator(generateLength, probabilities.getContextCounter(), probabilities.getAssocCounter(),
+                probabilities.getContextProbs(), probabilities.getAssocProbs(), order);
         System.out.println(generator.generateText());
         System.out.println("Entropy: " + String.format("%.3f", probabilities.getEntropy()) + " bits");
     }

@@ -1,4 +1,4 @@
-package Alphabet;
+package Pair;
 
 /**
  * TAI, October 2017
@@ -10,32 +10,28 @@ package Alphabet;
  * @author Tiago Faria, 73714, tiagohpf@ua.pt
  */
 
-public class AlphabetProb {
+public class AlphabetCount {
     private String letter;
-    private double prob;
+    private int number;
 
-    public AlphabetProb(String letter, double prob) {
+    public AlphabetCount(String letter, int number) {
         this.letter = letter;
-        this.prob = prob;
+        this.number = number;
     }
 
     public String getLetter() {
         return letter;
     }
 
-    public double getProb() {
-        return prob;
+    public int getNumber() {
+        return number;
     }
 
-    public void setLetter(String letter) {
-        this.letter = letter;
-    }
-
-    public void setProb(int prob) {
-        this.prob = prob;
+    public void setNumber(int number) {
+        this.number = number;
     }
 
     public String toString() {
-        return "{" + letter + ", " + prob + "}";
+        return "{" + letter + ", " + number + "}";
     }
 }

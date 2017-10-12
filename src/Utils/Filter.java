@@ -1,7 +1,7 @@
 package Utils;
 
-import Alphabet.AlphabetCount;
-
+import Pair.AlphabetCount;
+import Pair.AlphabetProb;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -51,5 +51,18 @@ public final class Filter {
         return  context.stream()                                // convert to stream
                 .filter(line -> line.getKey().equals(word))     // filter by word
                 .collect(Collectors.toList());                  // convert to list
+    }
+
+    /**
+     * Filter context with probabilities given a certain word
+     * @param context
+     * @param word
+     *
+     * @return filtered context
+     */
+    public static List<Pair<String, AlphabetProb>> filterContextProbs(List<Pair<String, AlphabetProb>> context, String word) {
+        return context.stream()
+                .filter(line -> line.getKey().equals(word))
+                .collect(Collectors.toList());
     }
 }

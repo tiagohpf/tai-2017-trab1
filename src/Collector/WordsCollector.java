@@ -1,6 +1,6 @@
 package Collector;
 
-import Alphabet.AlphabetCount;
+import Pair.AlphabetCount;
 import Utils.Filter;
 import Utils.Pair;
 
